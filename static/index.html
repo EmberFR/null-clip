@@ -1,0 +1,730 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Null Clips</title>
+    <meta
+      name="description"
+      content="Open-source native Linux GPU replay buffer and H.264 game clipper in GTK3 + Cairo (~120 MB RAM with UI closed, tested on ThinkPad T480)."
+    />
+    <meta property="og:title" content="Null Clips" />
+    <meta
+      property="og:description"
+      content="Open-source native Linux GPU replay buffer and H.264 game clipper in GTK3 + Cairo (~120 MB RAM with UI closed, tested on ThinkPad T480)."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./static/styles.css" />
+  </head>
+  <body>
+    <!-- Top Bar: Strictly 3 zones separated by 32px+ gap -->
+    <header class="topbar">
+      <div class="topbar-inner">
+        <a href="#top" class="brand-lockup" aria-label="null-clip home">
+          <svg class="brand-icon" width="28" height="28" viewBox="0 0 128 128" fill="none" aria-hidden="true">
+            <rect x="6" y="6" width="116" height="116" rx="28" fill="#141720" stroke="#5865F2" stroke-width="6" />
+            <circle cx="64" cy="64" r="32" fill="none" stroke="#5865F2" stroke-width="9" />
+            <circle cx="64" cy="64" r="13" fill="#10B981" />
+            <circle cx="90" cy="38" r="5" fill="#EF4444" />
+          </svg>
+          <span class="brand-name">null<span class="brand-accent">-</span>clip</span>
+        </a>
+
+        <nav class="topnav" aria-label="Primary Navigation">
+          <a href="#interactive-demo" class="nav-link">Interactive Demo</a>
+          <a href="#features" class="nav-link">Features</a>
+          <a href="#install" class="nav-link">Install</a>
+          <a href="#why-null-clip" class="nav-link">Why null-clip</a>
+          <a href="#source-cli" class="nav-link">Source &amp; CLI</a>
+        </nav>
+
+        <div class="topbar-cta">
+          <a href="./null-clips.AppImage" download="null-clips.AppImage" class="btn-primary">
+            Download .AppImage
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main id="top">
+      <!-- 1. HERO SECTION -->
+      <section class="hero-section">
+        <div class="container">
+          <div class="hero-meta">
+            v1.0.0 Release &middot; MIT License &middot; Native GTK3 + C Daemon &middot; ~120 MB Background RAM on ThinkPad T480
+          </div>
+
+          <h1 class="hero-title">
+            Instant-replay game clipping for Linux.
+          </h1>
+
+          <p class="hero-subtitle">
+            Press <strong>F8</strong> to save the last 30 seconds of gameplay directly from a hardware-encoded GPU RAM ring buffer. No Electron bloat, no scene setup, and zero SSD wear — uses <strong>~120 MB RAM</strong> with the UI closed in the background, tested on a <strong>Lenovo ThinkPad T480</strong>.
+          </p>
+
+          <div class="hero-actions">
+            <a href="./null-clips.AppImage" download="null-clips.AppImage" class="btn-primary btn-lg">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              Download null-clips.AppImage (88 KB)
+            </a>
+            <a
+              href="https://github.com/EmberFR/null-clip"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-secondary btn-lg"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                />
+              </svg>
+              GitHub Repository
+            </a>
+          </div>
+
+          <!-- Quick terminal bar -->
+          <div class="hero-terminal-bar">
+            <div class="hero-terminal-tabs" role="tablist" aria-label="Quick install method">
+              <button type="button" class="term-tab active" data-cmd="chmod +x null-clips.AppImage && ./null-clips.AppImage">
+                AppImage (Any Distro)
+              </button>
+              <button type="button" class="term-tab" data-cmd="git clone https://github.com/EmberFR/null-clip.git && cd null-clip && makepkg -si">
+                Arch / CachyOS
+              </button>
+              <button type="button" class="term-tab" data-cmd="git clone https://github.com/EmberFR/null-clip.git && cd null-clip && ./install.sh">
+                Source Installer
+              </button>
+            </div>
+            <div class="hero-terminal-body">
+              <span class="term-prompt">$</span>
+              <code id="hero-cmd-text">chmod +x null-clips.AppImage &amp;&amp; ./null-clips.AppImage</code>
+              <button type="button" class="copy-cmd-btn" id="hero-copy-btn" aria-label="Copy command">
+                Copy
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. INTERACTIVE APP SIMULATOR & REAL SCREENSHOTS -->
+      <section id="interactive-demo" class="section-block">
+        <div class="container">
+          <div class="section-header-row">
+            <div>
+              <div class="section-eyebrow">01. Live Interface &amp; Screenshots</div>
+              <h2 class="section-title">Try the GTK3 Desktop Interface or Inspect Real Captures</h2>
+            </div>
+            <div class="view-mode-tabs" role="tablist">
+              <button type="button" class="mode-tab active" data-view="simulator">
+                Interactive GTK3 Simulator
+              </button>
+              <button type="button" class="mode-tab" data-view="screenshots">
+                Real Linux Screenshots (3)
+              </button>
+            </div>
+          </div>
+
+          <!-- VIEW A: Interactive GTK3 Simulator matching settings.png + home.png + discord.png -->
+          <div id="view-simulator" class="simulator-wrapper">
+            <div class="sim-toolbar-banner">
+              <div class="sim-status-readout">
+                <span id="sim-process-state">GUI Open (GTK3 + Cairo) &middot; Replay Buffer Active (RAM Ring)</span>
+                <span class="sim-ram-counter" id="sim-ram-readout">RAM Footprint: 120.0 MB (UI Closed Target)</span>
+              </div>
+              <div class="sim-quick-triggers">
+                <button type="button" class="sim-action-btn accent" id="sim-trigger-hotkey-btn">
+                  Press <span id="sim-current-hotkey-label">F8</span> to Save 30s Clip
+                </button>
+                <button type="button" class="sim-action-btn" id="sim-toggle-headless-btn">
+                  Simulate Closing Window (&times;) &rarr; 0.8 MB C Daemon
+                </button>
+              </div>
+            </div>
+
+            <!-- Simulated Native GTK3 Window -->
+            <div class="gtk-window" id="gtk-window-frame">
+              <div class="gtk-headerbar">
+                <div class="gtk-title-group">
+                  <span class="gtk-app-title">null-clips</span>
+                  <span class="gtk-subtitle" id="gtk-buffer-indicator">Buffer: Running (gpu-screen-recorder -replay-storage ram)</span>
+                </div>
+                <div class="gtk-window-controls">
+                  <button type="button" class="gtk-close-btn" id="gtk-window-close-x" title="Close GTK3 GUI (Keep C Daemon Running)">
+                    &times;
+                  </button>
+                </div>
+              </div>
+
+              <!-- Headless Overlay when user clicks Close (x) -->
+              <div class="gtk-headless-banner hidden" id="gtk-headless-overlay">
+                <div class="headless-card">
+                  <h3>GTK3 GUI Process Exited (0 MB UI Overhead)</h3>
+                  <p>
+                    <code>null-clips-daemon</code> (<code>~0.8 MB RSS</code> compiled C binary reading <code>/dev/input/event*</code>) and <code>gpu-screen-recorder</code> are now running headless in the background. Total memory usage: <strong>~120 MB RAM</strong> (measured on Lenovo ThinkPad T480).
+                  </p>
+                  <div class="headless-actions">
+                    <button type="button" class="sim-action-btn accent" id="headless-press-f8-btn">
+                      Press Hotkey in Game (Saves Clip Headless)
+                    </button>
+                    <button type="button" class="sim-action-btn" id="headless-reopen-gui-btn">
+                      Reopen null-clips GUI
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- GTK Settings Panel (Matches assets/screenshots/settings.png verbatim) -->
+              <div class="gtk-body" id="gtk-body-content">
+                <div class="gtk-panel gtk-settings-panel">
+                  <div class="gtk-row">
+                    <label class="gtk-label" for="sim-folder-input">Clips Folder:</label>
+                    <input
+                      type="text"
+                      id="sim-folder-input"
+                      class="gtk-entry flex-grow"
+                      value="/home/ember/Videos/null-clips"
+                    />
+                    <button type="button" class="gtk-btn" id="sim-browse-btn">Browse</button>
+                    <button type="button" class="gtk-btn" id="sim-set-folder-btn">Set</button>
+                  </div>
+
+                  <div class="gtk-row">
+                    <label class="gtk-label" for="sim-length-select">Length:</label>
+                    <select id="sim-length-select" class="gtk-select">
+                      <option value="15s">15s</option>
+                      <option value="30s" selected>30s</option>
+                      <option value="60s">60s</option>
+                    </select>
+
+                    <label class="gtk-label" for="sim-quality-select">Quality:</label>
+                    <select id="sim-quality-select" class="gtk-select">
+                      <option value="720p (Ultra-Low RAM)" selected>720p (Ultra-Low RAM)</option>
+                      <option value="1080p (High Quality)">1080p (High Quality)</option>
+                      <option value="Native Display">Native Display</option>
+                    </select>
+
+                    <label class="gtk-label" for="sim-fps-select">FPS:</label>
+                    <select id="sim-fps-select" class="gtk-select">
+                      <option value="30">30</option>
+                      <option value="60" selected>60</option>
+                      <option value="120">120</option>
+                    </select>
+
+                    <label class="gtk-label" for="sim-hotkey-select">Hotkey:</label>
+                    <select id="sim-hotkey-select" class="gtk-select">
+                      <option value="F8" selected>F8</option>
+                      <option value="F9">F9</option>
+                      <option value="F10">F10</option>
+                      <option value="F12">F12</option>
+                      <option value="Insert">Insert</option>
+                    </select>
+                  </div>
+
+                  <div class="gtk-row">
+                    <label class="gtk-check">
+                      <input type="checkbox" id="sim-desktop-audio" checked />
+                      <span>Desktop Audio</span>
+                    </label>
+                    <label class="gtk-check">
+                      <input type="checkbox" id="sim-mic-audio" />
+                      <span>Mic Audio:</span>
+                    </label>
+                    <select id="sim-mic-select" class="gtk-select flex-grow">
+                      <option value="Default System Mic" selected>Default System Mic</option>
+                      <option value="PipeWire Built-in Analog Stereo">PipeWire Built-in Analog Stereo</option>
+                      <option value="FIFINE USB Condenser Microphone">FIFINE USB Condenser Microphone</option>
+                    </select>
+                  </div>
+
+                  <div class="gtk-row">
+                    <label class="gtk-check">
+                      <input type="checkbox" id="sim-keep-running" checked />
+                      <span>Keep Running When Closed (0.8 MB C Daemon)</span>
+                    </label>
+                    <label class="gtk-check">
+                      <input type="checkbox" id="sim-start-boot" />
+                      <span>Start on Boot</span>
+                    </label>
+                    <label class="gtk-check">
+                      <input type="checkbox" id="sim-sound-chime" checked />
+                      <span>Sound Chime</span>
+                    </label>
+                    <label class="gtk-check">
+                      <input type="checkbox" id="sim-osd-toast" checked />
+                      <span>OSD Toast</span>
+                    </label>
+                  </div>
+
+                  <div class="gtk-row">
+                    <label class="gtk-check">
+                      <input type="checkbox" id="sim-game-only" />
+                      <span>Game-Only Buffer (Optional)</span>
+                    </label>
+                    <label class="gtk-check">
+                      <input type="checkbox" id="sim-auto-name" checked />
+                      <span>Auto-Name by Game</span>
+                    </label>
+                    <label class="gtk-check">
+                      <input type="checkbox" id="sim-auto-discord" checked />
+                      <span>Auto-Discord Link</span>
+                    </label>
+                    <label class="gtk-label" for="sim-cap-select">Cap:</label>
+                    <select id="sim-cap-select" class="gtk-select">
+                      <option value="Off" selected>Off</option>
+                      <option value="5 GB">5 GB</option>
+                      <option value="10 GB">10 GB</option>
+                      <option value="25 GB">25 GB</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- GTK Recent Clips Panel (Matches assets/screenshots/home.png verbatim) -->
+                <div class="gtk-panel gtk-clips-panel">
+                  <div class="gtk-clips-header">
+                    <div class="gtk-clips-title" id="sim-clips-count">Recent Clips (3)</div>
+                    <div class="gtk-clips-filter">
+                      <label class="gtk-label" for="sim-game-filter">Game:</label>
+                      <select id="sim-game-filter" class="gtk-select">
+                        <option value="All Games" selected>All Games</option>
+                        <option value="Desktop">Desktop</option>
+                        <option value="Counter-Strike 2">Counter-Strike 2</option>
+                        <option value="Roblox">Roblox</option>
+                      </select>
+                      <button type="button" class="gtk-btn" id="sim-refresh-btn">Refresh</button>
+                    </div>
+                  </div>
+
+                  <div class="gtk-clips-list" id="sim-clips-list">
+                    <!-- Populated dynamically by static/app.js -->
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Simulated OSD Toast & Live Discord Embed Preview Bar -->
+            <div class="sim-feedback-grid">
+              <div class="sim-toast-box" id="sim-osd-box">
+                <div class="sim-box-label">Kernel inotify &amp; OSD Output</div>
+                <div class="sim-box-value" id="sim-osd-message">
+                  Ready — Press <strong>F8</strong> in the simulator above or on your keyboard to flush the H.264 RAM buffer.
+                </div>
+              </div>
+              <div class="sim-discord-box" id="sim-discord-preview">
+                <div class="sim-box-label">Clipboard &amp; Discord Embed Status (wl-copy / xclip)</div>
+                <div class="sim-box-value" id="sim-discord-message">
+                  Click <strong>Copy Link</strong> on any clip to test instant Discord inline MP4 link generation.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- VIEW B: Real Native Linux Screenshots from /assets/screenshots/ -->
+          <div id="view-screenshots" class="screenshots-gallery hidden">
+            <div class="screenshots-grid-top">
+              <figure class="screenshot-card">
+                <div class="screenshot-img-wrap">
+                  <img
+                    src="./assets/screenshots/home.png"
+                    alt="null-clip Home screen showing recent clips, per-game filter, and one-click Discord links"
+                    loading="lazy"
+                  />
+                </div>
+                <figcaption class="screenshot-caption">
+                  <strong>Home Gallery (`home.png`)</strong> &middot; Recent clips, per-game filter dropdown, and one-click Discord links (`Copy Link`).
+                </figcaption>
+              </figure>
+
+              <figure class="screenshot-card">
+                <div class="screenshot-img-wrap">
+                  <img
+                    src="./assets/screenshots/settings.png"
+                    alt="null-clip Settings bar showing hotkey selector, 720p Ultra-Low RAM quality, Game-Only buffer, and 0.8 MB C daemon toggle"
+                    loading="lazy"
+                  />
+                </div>
+                <figcaption class="screenshot-caption">
+                  <strong>Settings Bar (`settings.png`)</strong> &middot; Hotkey binding, 720p Ultra-Low RAM mode, Game-Only watchdog, and 0.8 MB headless C daemon.
+                </figcaption>
+              </figure>
+            </div>
+
+            <figure class="screenshot-card screenshot-card-wide">
+              <div class="screenshot-img-wrap">
+                <img
+                  src="./assets/screenshots/discord.png"
+                  alt="Discord inline video player embedding a direct mp4 link uploaded by null-clip"
+                  loading="lazy"
+                />
+              </div>
+              <figcaption class="screenshot-caption">
+                <strong>Inline Discord Sharing (`discord.png`)</strong> &middot; Share links auto-copy to Wayland (`wl-copy`) and X11 (`xclip`) clipboards and play inline in Discord without file size errors.
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. CORE CAPABILITIES (ASYMMETRIC BENTO GRID) -->
+      <section id="features" class="section-block">
+        <div class="container">
+          <div class="section-eyebrow">02. Architecture &amp; Capabilities</div>
+          <h2 class="section-title">Engineered for Zero-Bloat Linux Gaming</h2>
+
+          <div class="bento-grid">
+            <!-- Span 2: ~120 MB RAM Headless Architecture -->
+            <article class="bento-card span-2">
+              <div class="bento-num">01. Headless Memory Discipline</div>
+              <h3 class="bento-heading">~120 MB Total RAM with the UI Closed</h3>
+              <p class="bento-copy">
+                When you close the window, the GTK3 GUI process exits completely (<code>0 MB</code> UI overhead) and hands global hotkey listening to a compiled native C daemon (<code>~0.8 MB RSS</code>) alongside <code>gpu-screen-recorder</code>'s H.264 RAM ring buffer. Tested and verified on a <strong>Lenovo ThinkPad T480</strong>.
+              </p>
+              <div class="ram-comparison-bars">
+                <div class="ram-bar-row">
+                  <div class="ram-bar-meta">
+                    <span><strong>null-clip</strong> (UI Closed: 0.8 MB C Daemon + GPU RAM Ring Buffer)</span>
+                    <span class="mono-num accent-emerald">~120 MB RAM</span>
+                  </div>
+                  <div class="ram-track">
+                    <div class="ram-fill fill-emerald" style="width: 18%"></div>
+                  </div>
+                </div>
+                <div class="ram-bar-row">
+                  <div class="ram-bar-meta">
+                    <span>OBS Studio Replay Buffer (Full Scene Compositor + Qt GUI Open)</span>
+                    <span class="mono-num">~480 MB RAM</span>
+                  </div>
+                  <div class="ram-track">
+                    <div class="ram-fill fill-muted" style="width: 68%"></div>
+                  </div>
+                </div>
+                <div class="ram-bar-row">
+                  <div class="ram-bar-meta">
+                    <span>Electron / WebView Clippers (Resident Chromium Renderer)</span>
+                    <span class="mono-num">~680 MB RAM</span>
+                  </div>
+                  <div class="ram-track">
+                    <div class="ram-fill fill-muted" style="width: 94%"></div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Span 1: Driver-Level GPU Capture -->
+            <article class="bento-card span-1">
+              <div class="bento-num">02. Zero SSD Wear</div>
+              <h3 class="bento-heading">Driver-Level GPU Ring Buffer</h3>
+              <p class="bento-copy">
+                Powered by <code>gpu-screen-recorder</code> talking directly to NVENC, VAAPI, or Vulkan. Gameplay stays in a strictly RAM-backed circular buffer (<code>-replay-storage ram</code>) until you press <strong>F8</strong>, preventing constant SSD writes and frame drops.
+              </p>
+              <div class="bento-spec-list">
+                <div>NVIDIA &middot; NVENC Hardware H.264</div>
+                <div>AMD &amp; Intel UHD 620 &middot; VAAPI</div>
+                <div>Wayland DRM &amp; XDG Portal Fallback</div>
+              </div>
+            </article>
+
+            <!-- Span 1: Instant Discord Sharing -->
+            <article class="bento-card span-1">
+              <div class="bento-num">03. One-Click Embeds</div>
+              <h3 class="bento-heading">Discord Links That Just Work</h3>
+              <p class="bento-copy">
+                Click <strong>Copy Link</strong> (or enable <strong>Auto-Discord Link</strong>) and <code>null-clip</code> uploads the saved <code>.mp4</code> and copies a direct playable URL straight to both Wayland (<code>wl-copy</code>) and X11 (<code>xclip</code> / <code>xsel</code>) clipboards.
+              </p>
+              <div class="bento-spec-list">
+                <div>Plays inline inside Discord chat</div>
+                <div>Optional desktop OSD notification</div>
+                <div>Works headless on every F8 press</div>
+              </div>
+            </article>
+
+            <!-- Span 2: Automatic Game Detection & Kernel inotify -->
+            <article class="bento-card span-2">
+              <div class="bento-num">04. Kernel-Native Automation</div>
+              <h3 class="bento-heading">Auto-Titled by Game, Game-Only Watchdog &amp; Kernel inotify</h3>
+              <p class="bento-copy">
+                The millisecond <code>gpu-screen-recorder</code> finishes writing a clip, <code>null-clip</code> wakes via Linux <code>libc inotify</code> (<code>IN_CLOSE_WRITE | IN_MOVED_TO</code>) with zero disk polling. It inspects the active window across Hyprland (<code>hyprctl</code>), Sway (<code>swaymsg</code>), X11 (<code>xdotool</code> / <code>xprop</code>), and <code>/proc</code> to name and tag your clip automatically.
+              </p>
+              <div class="auto-tag-examples">
+                <code>Counter-Strike-2_2026-10-29_04-12-09.mp4</code>
+                <code>Roblox-Sober_2026-10-29_11-40-22.mp4</code>
+                <code>Elden-Ring_2026-10-29_19-05-44.mp4</code>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. INSTALLATION MATRIX -->
+      <section id="install" class="section-block">
+        <div class="container">
+          <div class="section-eyebrow">03. Installation &amp; Packages</div>
+          <h2 class="section-title">Install on Any Linux Distribution in 30 Seconds</h2>
+
+          <div class="distro-tabs-container">
+            <div class="distro-tab-list" role="tablist">
+              <button type="button" class="distro-tab active" data-distro="appimage">
+                Standalone .AppImage (Universal)
+              </button>
+              <button type="button" class="distro-tab" data-distro="arch">
+                Arch / Manjaro / CachyOS
+              </button>
+              <button type="button" class="distro-tab" data-distro="fedora">
+                Fedora / Nobara
+              </button>
+              <button type="button" class="distro-tab" data-distro="ubuntu">
+                Ubuntu / Debian / Mint / Pop!_OS
+              </button>
+            </div>
+
+            <!-- Panel: AppImage -->
+            <div class="distro-panel" id="distro-appimage">
+              <p class="distro-desc">
+                <code>null-clips.AppImage</code> uses a FUSE-free ELF64 Type-2 header, so it launches directly on any x86_64 Linux distro and integrates cleanly with AppImage launchers like Shelly without requiring <code>libfuse2</code>.
+              </p>
+              <div class="code-block-wrap">
+                <pre><code>curl -fLO https://github.com/EmberFR/null-clip/releases/latest/download/null-clips.AppImage
+chmod +x null-clips.AppImage
+./null-clips.AppImage</code></pre>
+                <button type="button" class="copy-block-btn" data-copy="curl -fLO https://github.com/EmberFR/null-clip/releases/latest/download/null-clips.AppImage&#10;chmod +x null-clips.AppImage&#10;./null-clips.AppImage">
+                  Copy
+                </button>
+              </div>
+            </div>
+
+            <!-- Panel: Arch -->
+            <div class="distro-panel hidden" id="distro-arch">
+              <p class="distro-desc">
+                Install required runtime packages with <code>pacman</code> and build the native package via the included <code>PKGBUILD</code>:
+              </p>
+              <div class="code-block-wrap">
+                <pre><code>sudo pacman -S --needed gpu-screen-recorder ffmpeg wl-clipboard curl python python-gobject gtk3
+git clone https://github.com/EmberFR/null-clip.git &amp;&amp; cd null-clip &amp;&amp; makepkg -si</code></pre>
+                <button type="button" class="copy-block-btn" data-copy="sudo pacman -S --needed gpu-screen-recorder ffmpeg wl-clipboard curl python python-gobject gtk3&#10;git clone https://github.com/EmberFR/null-clip.git && cd null-clip && makepkg -si">
+                  Copy
+                </button>
+              </div>
+            </div>
+
+            <!-- Panel: Fedora -->
+            <div class="distro-panel hidden" id="distro-fedora">
+              <p class="distro-desc">
+                Install dependencies on Fedora or Nobara, then run <code>./install.sh</code> to install the desktop entry, icon, and executable to <code>~/.local/bin/null-clips</code>:
+              </p>
+              <div class="code-block-wrap">
+                <pre><code>sudo dnf install -y gpu-screen-recorder ffmpeg wl-clipboard curl python3 python3-gobject gtk3
+git clone https://github.com/EmberFR/null-clip.git &amp;&amp; cd null-clip &amp;&amp; ./install.sh</code></pre>
+                <button type="button" class="copy-block-btn" data-copy="sudo dnf install -y gpu-screen-recorder ffmpeg wl-clipboard curl python3 python3-gobject gtk3&#10;git clone https://github.com/EmberFR/null-clip.git && cd null-clip && ./install.sh">
+                  Copy
+                </button>
+              </div>
+            </div>
+
+            <!-- Panel: Ubuntu / Debian -->
+            <div class="distro-panel hidden" id="distro-ubuntu">
+              <p class="distro-desc">
+                Install GTK3 GObject introspection bindings and tools on Ubuntu, Debian, Linux Mint, or Pop!_OS, then run <code>./install.sh</code>:
+              </p>
+              <div class="code-block-wrap">
+                <pre><code>sudo apt-get update &amp;&amp; sudo apt-get install -y ffmpeg wl-clipboard curl python3 python3-gi python3-gi-cairo gir1.2-gtk-3.0
+git clone https://github.com/EmberFR/null-clip.git &amp;&amp; cd null-clip &amp;&amp; ./install.sh</code></pre>
+                <button type="button" class="copy-block-btn" data-copy="sudo apt-get update && sudo apt-get install -y ffmpeg wl-clipboard curl python3 python3-gi python3-gi-cairo gir1.2-gtk-3.0&#10;git clone https://github.com/EmberFR/null-clip.git && cd null-clip && ./install.sh">
+                  Copy
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. WHY NULL-CLIP & COMPATIBILITY TABLE -->
+      <section id="why-null-clip" class="section-block">
+        <div class="container">
+          <div class="section-eyebrow">04. Benchmarks &amp; Comparison</div>
+          <h2 class="section-title">Why Choose null-clip Over OBS or Electron Clippers?</h2>
+
+          <div class="table-responsive">
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th>Metric</th>
+                  <th>OBS Replay Buffer</th>
+                  <th>Electron / WebView Clippers</th>
+                  <th class="highlight-col">null-clip (v1.0.0)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Setup Time</strong></td>
+                  <td>Launch OBS, build a scene, enable buffer, bind hotkey</td>
+                  <td>Install heavy runtime &amp; background web server</td>
+                  <td class="highlight-col"><strong>Launch, press F8</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>Background RAM (UI Closed)</strong></td>
+                  <td><code>~350–600 MB+</code> (GUI must stay open)</td>
+                  <td><code>~400–900 MB+</code> (Chromium stays resident)</td>
+                  <td class="highlight-col"><strong>~120 MB RAM</strong> total (ThinkPad T480; GTK3 exits completely)</td>
+                </tr>
+                <tr>
+                  <td><strong>GPU Overhead</strong></td>
+                  <td>Re-composes a full scene continuously</td>
+                  <td>Varies by wrapper</td>
+                  <td class="highlight-col">Captures framebuffer directly via <code>gpu-screen-recorder</code></td>
+                </tr>
+                <tr>
+                  <td><strong>Global Hotkey on Wayland</strong></td>
+                  <td>Needs compositor rules or X11 focus</td>
+                  <td>Often blocked on Wayland</td>
+                  <td class="highlight-col">Reads <code>/dev/input/event*</code> in a <code>~0.8 MB</code> C daemon + <code>hyprctl</code>/<code>swaymsg</code></td>
+                </tr>
+                <tr>
+                  <td><strong>Discord Sharing</strong></td>
+                  <td>Manual file lookup &amp; upload</td>
+                  <td>Local tunnel or manual upload</td>
+                  <td class="highlight-col">Built-in direct <code>.mp4</code> uploader + auto clipboard copy</td>
+                </tr>
+                <tr>
+                  <td><strong>SSD Wear</strong></td>
+                  <td>Optional RAM buffer</td>
+                  <td>Often writes temp segments to disk</td>
+                  <td class="highlight-col">Strictly RAM-backed (<code>-replay-storage ram</code>)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="compat-strip">
+            <div class="compat-group">
+              <div class="compat-label">Verified Compositors &amp; Desktops</div>
+              <div class="compat-items">
+                Hyprland (Wayland) &middot; KDE Plasma (Wayland) &middot; GNOME (Wayland) &middot; Sway (Wayland) &middot; All X11 WMs / DEs
+              </div>
+            </div>
+            <div class="compat-group">
+              <div class="compat-label">Hardware Encoders</div>
+              <div class="compat-items">
+                NVIDIA (NVENC) &middot; AMD (VAAPI) &middot; Intel incl. ThinkPad T480 UHD 620 (VAAPI) &middot; XDG Portal Fallback
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. LIVE SOURCE CODE, CLI & CONFIGURATION INSPECTOR -->
+      <section id="source-cli" class="section-block">
+        <div class="container">
+          <div class="section-header-row">
+            <div>
+              <div class="section-eyebrow">05. Open Source Transparency</div>
+              <h2 class="section-title">Inspect CLI Flags, JSON Config &amp; C Daemon Source</h2>
+            </div>
+            <div class="source-tabs" role="tablist">
+              <button type="button" class="src-tab active" data-src="cli">CLI &amp; Config</button>
+              <button type="button" class="src-tab" data-src="null_clips_daemon.c">null_clips_daemon.c (3.6 KB)</button>
+              <button type="button" class="src-tab" data-src="install.sh">install.sh</button>
+              <button type="button" class="src-tab" data-src="PKGBUILD">PKGBUILD</button>
+            </div>
+          </div>
+
+          <div id="src-panel-cli" class="source-grid-two">
+            <div class="code-card">
+              <div class="code-card-header">
+                <span>CLI Reference (`null-clips --help`)</span>
+                <span>v1.0.0</span>
+              </div>
+              <pre class="code-pre"><code>null-clips                 Open the native GTK3 + Cairo desktop interface
+null-clips --background    Start replay buffer &amp; headless daemon without GUI
+null-clips --daemon        Run headless evdev hotkey &amp; Game-Only watcher (~0.8 MB)
+null-clips --save-clip     Trigger immediate clip save, game rename &amp; upload
+null-clips --quit          Stop background daemon and gpu-screen-recorder
+null-clips --version       Print current version (v1.0.0)
+null-clips --help          Show available CLI flags</code></pre>
+            </div>
+
+            <div class="code-card">
+              <div class="code-card-header">
+                <span>~/.config/null-clips/settings.json</span>
+                <span>Auto-generated</span>
+              </div>
+              <pre class="code-pre"><code>{
+  "outputDir": "/home/user/Videos/null-clips",
+  "seconds": "30",
+  "fps": "60",
+  "resolution": "1280x720",
+  "hotkey": "F8",
+  "desktopAudio": true,
+  "includeMic": true,
+  "micDevice": "default_input",
+  "soundEnabled": true,
+  "osdNotifications": true,
+  "autoShareDiscord": false,
+  "autoRenameWithGame": true,
+  "gameOnlyBuffer": false,
+  "folderSizeCapGb": "0",
+  "keepRunningClosed": true,
+  "startOnBoot": false
+}</code></pre>
+            </div>
+          </div>
+
+          <div id="src-panel-file" class="code-card hidden">
+            <div class="code-card-header">
+              <span id="live-source-filename">null_clips_daemon.c</span>
+              <button type="button" class="copy-cmd-btn" id="copy-source-btn">Copy Source</button>
+            </div>
+            <pre class="code-pre"><code id="live-source-content">Loading file from repository...</code></pre>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Quiet Footer -->
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div class="footer-brand">
+          <span class="brand-name">null<span class="brand-accent">-</span>clip</span>
+          <span class="footer-meta">Created by EmberFR &middot; MIT License &middot; Linux x86_64</span>
+        </div>
+        <div class="footer-links">
+          <a href="./null-clips.AppImage" download="null-clips.AppImage">Download .AppImage</a>
+          <a href="https://github.com/EmberFR/null-clip" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://github.com/EmberFR/null-clip/releases/latest" target="_blank" rel="noopener noreferrer">Releases</a>
+          <a href="https://github.com/EmberFR/null-clip/issues" target="_blank" rel="noopener noreferrer">Issues</a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Video Preview Modal for Simulator "Play" Action -->
+    <div class="modal-backdrop hidden" id="clip-modal" role="dialog" aria-modal="true" aria-labelledby="modal-clip-title">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <span id="modal-clip-title" class="mono-num">Desktop_2026-10-29_13-09-15.mp4</span>
+          <button type="button" class="gtk-close-btn" id="close-modal-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="simulated-video-stage">
+            <img src="./assets/screenshots/discord.png" alt="Clip Playback Preview" class="modal-preview-img" />
+            <div class="modal-video-caption" id="modal-clip-details">
+              H.264 MP4 &middot; 1280x720 @ 60 FPS &middot; Hardware Encoded via gpu-screen-recorder
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="./static/app.js"></script>
+  </body>
+</html>
