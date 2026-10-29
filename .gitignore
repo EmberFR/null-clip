@@ -1,0 +1,23 @@
+node_modules/
+build/
+dist/
+coverage/
+.DS_Store
+*.log
+*.AppImage
+.aistudio/
+metadata.json
+public/assets/
+.env*
+__pycache__/
+*.pyc
+
+# AI Studio preview wrapper (ignored when pushing to GitHub)
+app.py
+package.json
+src/
+server.ts
+index.html
+bun.lock
+vite.config.ts
+tsconfig.json
